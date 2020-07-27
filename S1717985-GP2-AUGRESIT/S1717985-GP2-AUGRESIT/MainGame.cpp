@@ -14,11 +14,9 @@ MainGame::MainGame()
 	Texture* texture();
 	Texture* texture1();
 	Overlay* overlay();
-	Shader* rimShader();
-	Shader* toonShader();
-	Shader* explosionShader();
 	Shader* randColShader();
 	Shader* skyboxShader();
+	GameAudio* audioDevice();
 }
 
 
@@ -46,11 +44,10 @@ void MainGame::initialiseSystem()
 	texture1.initialise("..\\res\\water.jpg");
 
 	//Initialise shaders
-	toonShader.initialise("..\\res\\shaderToon.vert", "..\\res\\shaderToon.frag");
-	rimShader.initialise("..\\res\\shaderRim.vert", "..\\res\\shaderRim.frag");
 	skyboxShader.initialise("..\\res\\shaderSkybox.vert", "..\\res\\shaderSkybox.frag");
-	explosionShader.initialise("..\\res\\shaderExplosion.vert", "..\\res\\shaderExplosion.frag", "..\\res\\shaderExplosion.geom");
 	randColShader.initialise("..\\res\\shaderRandomColour.vert", "..\\res\\shaderRandomColour.frag");
+
+	backgroundAudio = audioDevice.loadSound("..\\res\\purepu.wav");
 
 	camera.initialiseCamera(glm::vec3(0, 0, 0), 75.0f, (float)gameDisplay.getWidth() / (float)gameDisplay.getHeight(), 0.01f, 1000.0f);
 
@@ -147,6 +144,8 @@ void MainGame::gameLoop()
 	{
 		processInput();
 		drawGame();
+
+		AudioPlay(backgroundAudio, glm::vec3(0.0f, 0.0f, 5.0f));
 	}
 }
 
@@ -162,26 +161,6 @@ void MainGame::processInput()
 			break;
 		}
 	}
-}
-
-void MainGame::setRimShader()
-{
-	rimShader.setMat4("u_vm", camera.GetView());
-	rimShader.setMat4("u_pm", camera.GetProjection());
-	rimShader.setFloat("value", counter);
-}
-
-void MainGame::setToonShader()
-{
-	toonShader.setVec3("lightDir", glm::vec3(0.5, 0.4, 0.6));
-}
-
-void MainGame::setExplosionShader()
-{
-	explosionShader.setMat4("model", transform.GetModel());
-	explosionShader.setMat4("view", camera.GetView());
-	explosionShader.setMat4("projection", camera.GetProjection());
-	explosionShader.setFloat("time", counter);
 }
 
 void MainGame::setRandColShader()
@@ -211,9 +190,9 @@ void MainGame::drawGame()
 	transform.SetRotation(monkeyRot);
 	transform.SetScale(monkeyScale);
 
-	rimShader.Bind();
-	setRimShader();
-	rimShader.Update(transform, camera);
+	randColShader.Bind();
+	setRandColShader();
+	randColShader.Update(transform, camera);
 	texture1.Bind(0);
 	monkey.draw();
 
@@ -227,9 +206,9 @@ void MainGame::drawGame()
 	transform.SetRotation(bowlRot);
 	transform.SetScale(bowlScale);
 
-	toonShader.Bind();
-	setToonShader();
-	toonShader.Update(transform, camera);
+	randColShader.Bind();
+	setRandColShader();
+	randColShader.Update(transform, camera);
 	texture1.Bind(0);
 	bowl.draw();
 
@@ -260,3 +239,13 @@ void MainGame::drawGame()
 	gameDisplay.swapBuffer();
 }
 
+void MainGame::AudioPlay(unsigned int source, glm::vec3 pos)
+{
+	//Audio state
+	ALint state;
+	alGetSourcei(source, AL_SOURCE_STATE, &state);
+	if (AL_PLAYING != state)
+	{
+		audioDevice.playSound(source, pos);
+	}
+}

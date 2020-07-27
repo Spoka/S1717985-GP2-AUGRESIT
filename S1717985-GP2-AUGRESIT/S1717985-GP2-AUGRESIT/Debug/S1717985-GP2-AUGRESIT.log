@@ -1,19 +1,2 @@
-﻿  Display.cpp
-  main.cpp
-  MainGame.cpp
-  Mesh.cpp
-  ObjLoader.cpp
-d:\github\s1717985-gp2-augresit\s1717985-gp2-augresit\s1717985-gp2-augresit\objloader.cpp(380): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-  Overlay.cpp
-  Shader.cpp
-  Texture.cpp
-  Generating Code...
-  stb_image.c
-d:\github\s1717985-gp2-augresit\s1717985-gp2-augresit\s1717985-gp2-augresit\stb_image.c(300): error C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\stdio.h(208): note: see declaration of 'fopen'
-d:\github\s1717985-gp2-augresit\s1717985-gp2-augresit\s1717985-gp2-augresit\stb_image.c(362): error C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\stdio.h(208): note: see declaration of 'fopen'
-d:\github\s1717985-gp2-augresit\s1717985-gp2-augresit\s1717985-gp2-augresit\stb_image.c(400): error C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\stdio.h(208): note: see declaration of 'fopen'
-d:\github\s1717985-gp2-augresit\s1717985-gp2-augresit\s1717985-gp2-augresit\stb_image.c(4293): error C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\stdio.h(208): note: see declaration of 'fopen'
+﻿  MainGame.cpp
+  S1717985-GP2-AUGRESIT.vcxproj -> D:\GitHub\S1717985-GP2-AUGRESIT\S1717985-GP2-AUGRESIT\Debug\S1717985-GP2-AUGRESIT.exe

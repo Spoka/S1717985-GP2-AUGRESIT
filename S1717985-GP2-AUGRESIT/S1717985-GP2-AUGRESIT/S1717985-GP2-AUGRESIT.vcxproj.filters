@@ -45,6 +45,9 @@
     <ClInclude Include="Transform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GameAudio.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Display.cpp">
@@ -74,5 +77,22 @@
     <ClCompile Include="Texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GameAudio.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\res\shaderRandomColour.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\res\shaderRandomColour.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\res\shaderSkybox.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\res\shaderSkybox.vert">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

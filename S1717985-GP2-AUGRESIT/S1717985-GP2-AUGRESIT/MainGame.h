@@ -8,6 +8,7 @@
 #include "Texture.h"
 #include "Transform.h"
 #include "Overlay.h"
+#include "GameAudio.h"
 
 enum class GameState { PLAY, EXIT };
 
@@ -26,9 +27,8 @@ private:
 	void gameLoop();
 	void drawGame();
 
-	void setRimShader();
-	void setToonShader();
-	void setExplosionShader();
+	void AudioPlay(unsigned int source, glm::vec3 pos);
+
 	void setRandColShader();
 	
 
@@ -49,6 +49,9 @@ private:
 	Mesh monkey;
 	Mesh bowl;
 	Mesh car;
+
+	GameAudio audioDevice;
+	unsigned int backgroundAudio;
 
 	Texture texture;
 	Texture texture1;
