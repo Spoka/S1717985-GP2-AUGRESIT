@@ -1,5 +1,4 @@
 #include "Mesh.h"
-#include <vector>
 
 
 Mesh::Mesh()
@@ -60,6 +59,8 @@ void Mesh::loadModel(const std::string& filename)
 {
 	IndexedModel model = OBJModel(filename).ToIndexedModel();
 	initialiseModel(model);
+
+	Sphere sphere();
 }
 
 Mesh::~Mesh()
@@ -76,4 +77,8 @@ void Mesh::draw()
 	glBindVertexArray(0);
 }
 
-
+void Mesh::UpdateSphere(glm::vec3 pos, float rad)
+{
+	sphere.SetPosition(pos);
+	sphere.SetRadius(rad);
+}

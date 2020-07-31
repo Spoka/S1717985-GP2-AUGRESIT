@@ -48,11 +48,13 @@ void MainGame::initialiseSystem()
 	randColShader.initialise("..\\res\\shaderRandomColour.vert", "..\\res\\shaderRandomColour.frag");
 
 	backgroundAudio = audioDevice.loadSound("..\\res\\purepu.wav");
+	contactAudio = audioDevice.loadSound("..\\res\\weesound.wav");
 
 	camera.initialiseCamera(glm::vec3(0, 0, 0), 75.0f, (float)gameDisplay.getWidth() / (float)gameDisplay.getHeight(), 0.01f, 1000.0f);
 
 	counter = 1.0f;
-	
+	bowlWay = 1.0f;
+
 	vector<std::string> faces
 	{
 		"..\\res\\skybox\\right.jpg",
@@ -145,8 +147,18 @@ void MainGame::gameLoop()
 		processInput();
 		drawGame();
 
-		AudioPlay(backgroundAudio, glm::vec3(0.0f, 0.0f, 5.0f));
+		if (CollisionDetection(monkey.GetSpherePos(), monkey.GetSphereRadius(), bowl.GetSpherePos(), bowl.GetSphereRadius()))
+		{
+			whichWay = true;
+		}
+		else if (CollisionDetection(car.GetSpherePos(), car.GetSphereRadius(), bowl.GetSpherePos(), bowl.GetSphereRadius()))
+		{
+			whichWay = false;
+		}
+
+		AudioPlay(backgroundAudio, glm::vec3(0.0f, 0.0f, 5.0f)); 
 	}
+
 }
 
 void MainGame::processInput()
@@ -176,14 +188,16 @@ void MainGame::setRandColShader()
 
 void MainGame::drawGame()
 {
+
+
 	gameDisplay.clearDisplay(0.0, 0.0, 0.0, 1.0);
 	
 	Skybox();
 
-	/////////////////MONKEY//////////////////////////
+	/////////////////MONKEY//////////////////////////STATIC
 
-	glm::vec3 monkeyPos = glm::vec3(15, 10, 100.0);
-	glm::vec3 monkeyRot = glm::vec3(185, counter * 2, 0.0);
+	glm::vec3 monkeyPos = glm::vec3(20, 0, 100.0);
+	glm::vec3 monkeyRot = glm::vec3(185, counter, 0.0);
 	glm::vec3 monkeyScale = glm::vec3(2, 2, 2);
 
 	transform.SetPosition(monkeyPos);
@@ -195,11 +209,12 @@ void MainGame::drawGame()
 	randColShader.Update(transform, camera);
 	texture1.Bind(0);
 	monkey.draw();
+	monkey.UpdateSphere(*transform.GetPosition(), 2.0f);
 
-	////////////////BOWL/////////////////////////////
+	////////////////BOWL/////////////////////////////DYNAMIC
 
-	glm::vec3 bowlPos = glm::vec3(0, -10, 100.0);
-	glm::vec3 bowlRot = glm::vec3(90, counter *2, counter *.5);
+	glm::vec3 bowlPos = glm::vec3(counter * 6, 0, 100.0);
+	glm::vec3 bowlRot = glm::vec3(90, 2, 1);
 	glm::vec3 bowlScale = glm::vec3(0.1, 0.1, 0.1);
 
 	transform.SetPosition(bowlPos);
@@ -211,11 +226,12 @@ void MainGame::drawGame()
 	randColShader.Update(transform, camera);
 	texture1.Bind(0);
 	bowl.draw();
+	bowl.UpdateSphere(*transform.GetPosition(), 2.0f);
 
-	///////////////////CAR//////////////////////////
+	///////////////////CAR//////////////////////////STATIC
 
-	glm::vec3 carPos = glm::vec3(-10, 10, 100.0);
-	glm::vec3 carRot = glm::vec3(90 , counter *3, 0);
+	glm::vec3 carPos = glm::vec3(-20, 0, 100.0);
+	glm::vec3 carRot = glm::vec3(90, counter, 0);
 	glm::vec3 carScale = glm::vec3(0.03, 0.03, 0.03);
 
 	transform.SetPosition(carPos);
@@ -227,9 +243,17 @@ void MainGame::drawGame()
 	randColShader.Update(transform, camera);
 	texture.Bind(0);
 	car.draw();
+	car.UpdateSphere(*transform.GetPosition(), 2.0f);
 
 
-	counter = counter + 0.01f;
+	if (whichWay)
+	{
+		counter = counter - 0.01f;
+	}
+	else
+	{
+		counter = counter + 0.01f;
+	}
 
 	
 
@@ -238,6 +262,36 @@ void MainGame::drawGame()
 
 	gameDisplay.swapBuffer();
 }
+
+bool MainGame::CollisionDetection(glm::vec3 pos1, float rad1, glm::vec3 pos2, float rad2)
+{
+	//calculate distance between two pheres
+	float distance = glm::sqrt((pos2.x - pos1.x)*(pos2.x - pos1.x) + (pos2.y - pos1.y)*(pos2.y - pos1.y) + (pos2.z - pos1.z)*(pos2.z - pos1.z));
+
+	//Check if distance is smaller than sum of radiuses
+	if (distance < (rad1 + rad2))
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+/*bool MainGame::WhichWay()
+{
+	if (CollisionDetection(monkey.GetSpherePos(), monkey.GetSphereRadius(), bowl.GetSpherePos(), bowl.GetSphereRadius()))
+	{
+		//when bowl touches monkey it goes true and towards car
+		return true;
+	}
+	else if (CollisionDetection(car.GetSpherePos(), car.GetSphereRadius(), bowl.GetSpherePos(), bowl.GetSphereRadius()))
+	{
+		//when bowl touches car it goes false and towards monkey
+		return false;
+	}
+}*/
 
 void MainGame::AudioPlay(unsigned int source, glm::vec3 pos)
 {

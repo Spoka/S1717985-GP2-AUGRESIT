@@ -31,6 +31,8 @@ private:
 
 	void setRandColShader();
 	
+	bool CollisionDetection(glm::vec3 pos1, float rad1, glm::vec3 pos2, float rad2);
+	bool whichWay = false;
 
 	void Skybox();
 	GLuint skyboxVAO, skyboxVBO, cubemapTexture;
@@ -52,6 +54,7 @@ private:
 
 	GameAudio audioDevice;
 	unsigned int backgroundAudio;
+	unsigned int contactAudio;
 
 	Texture texture;
 	Texture texture1;
@@ -63,6 +66,7 @@ private:
 	Camera camera;
 
 	float counter;
+	float bowlWay;
 
 	float colourX;
 	float colourY;

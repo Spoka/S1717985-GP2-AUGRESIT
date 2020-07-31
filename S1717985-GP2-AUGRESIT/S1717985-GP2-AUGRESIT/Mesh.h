@@ -2,6 +2,7 @@
 #include <glm\glm.hpp>
 #include <GL\glew.h>
 #include "ObjLoader.h"
+#include <vector>
 
 struct Vertex
 {
@@ -23,6 +24,36 @@ private:
 	glm::vec3 normal;
 };
 
+struct Sphere
+{
+public:
+
+	Sphere() {}
+
+	Sphere(glm::vec3& pos, float radius)
+	{
+		this->pos = pos;
+	}
+
+	//Getters for sphere data
+	glm::vec3 GetPosition() { return pos; }
+	float GetRadius() { return radius; }
+
+	//position setter
+	void SetPosition(glm::vec3 pos)
+	{
+		this->pos = pos;
+	}
+	//radius setter
+	void SetRadius(float radius)
+	{
+		this->radius = radius;
+	}
+
+private:
+	glm::vec3 pos;
+	float radius;
+};
 
 class Mesh
 {
@@ -30,7 +61,9 @@ public:
 	Mesh();
 	~Mesh();
 
-
+	void UpdateSphere(glm::vec3 pos, float rad);
+	glm::vec3 GetSpherePos() { return sphere.GetPosition(); }
+	float GetSphereRadius() { return sphere.GetRadius(); }
 	void draw();
 	void initialise(Vertex* vertices, unsigned int numVertices, unsigned int* indices, unsigned int numIndices);
 	void loadModel(const std::string& filename);
@@ -48,6 +81,8 @@ private:
 		INDEX_VB,
 		NUM_BUFFERS
 	};
+
+	Sphere sphere;
 
 	GLuint vertexArrayObject;
 	GLuint vertexArrayBuffers[NUM_BUFFERS]; // create our array of buffers
