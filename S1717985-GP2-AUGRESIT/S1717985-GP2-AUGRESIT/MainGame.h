@@ -54,7 +54,7 @@ private:
 
 	GameAudio audioDevice;
 	unsigned int backgroundAudio;
-	unsigned int contactAudio;
+	unsigned int collisionAudio;
 
 	Texture texture;
 	Texture texture1;

@@ -48,7 +48,7 @@ void MainGame::initialiseSystem()
 	randColShader.initialise("..\\res\\shaderRandomColour.vert", "..\\res\\shaderRandomColour.frag");
 
 	backgroundAudio = audioDevice.loadSound("..\\res\\purepu.wav");
-	contactAudio = audioDevice.loadSound("..\\res\\weesound.wav");
+	collisionAudio = audioDevice.loadSound("..\\res\\weesound.wav");
 
 	camera.initialiseCamera(glm::vec3(0, 0, 0), 75.0f, (float)gameDisplay.getWidth() / (float)gameDisplay.getHeight(), 0.01f, 1000.0f);
 
@@ -150,10 +150,12 @@ void MainGame::gameLoop()
 		if (CollisionDetection(monkey.GetSpherePos(), monkey.GetSphereRadius(), bowl.GetSpherePos(), bowl.GetSphereRadius()))
 		{
 			whichWay = true;
+			AudioPlay(collisionAudio, glm::vec3(0.0f, 0.0f, 5.0f));
 		}
 		else if (CollisionDetection(car.GetSpherePos(), car.GetSphereRadius(), bowl.GetSpherePos(), bowl.GetSphereRadius()))
 		{
 			whichWay = false;
+			AudioPlay(collisionAudio, glm::vec3(0.0f, 0.0f, 5.0f));
 		}
 
 		AudioPlay(backgroundAudio, glm::vec3(0.0f, 0.0f, 5.0f)); 
