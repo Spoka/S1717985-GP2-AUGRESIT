@@ -40,12 +40,12 @@ void MainGame::initialiseSystem()
 	bowl.loadModel("..\\res\\bowl.obj");
 
 	//Initialise textures
-	texture.initialise("..\\res\\bricks.jpg"); 
-	texture1.initialise("..\\res\\water.jpg");
+	texture.initialiseTexture("..\\res\\bricks.jpg"); 
+	texture1.initialiseTexture("..\\res\\water.jpg");
 
 	//Initialise shaders
 	skyboxShader.initialise("..\\res\\shaderSkybox.vert", "..\\res\\shaderSkybox.frag");
-	randColShader.initialise("..\\res\\shaderRandomColour.vert", "..\\res\\shaderRandomColour.frag");
+	colourShader.initialise("..\\res\\shaderRandomColour.vert", "..\\res\\shaderRandomColour.frag");
 
 	backgroundAudio = audioDevice.loadSound("..\\res\\purepu.wav");
 	collisionAudio = audioDevice.loadSound("..\\res\\weesound.wav");
@@ -53,7 +53,6 @@ void MainGame::initialiseSystem()
 	camera.initialiseCamera(glm::vec3(0, 0, 0), 75.0f, (float)gameDisplay.getWidth() / (float)gameDisplay.getHeight(), 0.01f, 1000.0f);
 
 	counter = 1.0f;
-	bowlWay = 1.0f;
 
 	vector<std::string> faces
 	{
@@ -128,7 +127,6 @@ void MainGame::Skybox()
 	glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
 	skyboxShader.Bind();
 	skyboxShader.setInt("skybox", 0);
-	//view = glm::mat4(glm::mat3(camera.GetViewMatrix())); // remove translation from the view matrix
 	skyboxShader.setMat4("view", camera.GetView());
 	skyboxShader.setMat4("projection", camera.GetProjection());
 	// skybox cube
@@ -177,15 +175,11 @@ void MainGame::processInput()
 	}
 }
 
-void MainGame::setRandColShader()
+void MainGame::setColourShader()
 {
-	float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-	float g = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-	float b = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-
-	randColShader.setFloat("randColourX", r);
-	randColShader.setFloat("randColourY", g);
-	randColShader.setFloat("randColourZ", b);
+	colourShader.setFloat("r", -counter);
+	colourShader.setFloat("g", counter);
+	colourShader.setFloat("b", counter * 2);
 }
 
 void MainGame::drawGame()
@@ -196,7 +190,7 @@ void MainGame::drawGame()
 	
 	Skybox();
 
-	/////////////////MONKEY//////////////////////////STATIC
+	/////////////////MONKEY//////////////////////////
 
 	glm::vec3 monkeyPos = glm::vec3(20, 0, 100.0);
 	glm::vec3 monkeyRot = glm::vec3(185, counter, 0.0);
@@ -206,16 +200,16 @@ void MainGame::drawGame()
 	transform.SetRotation(monkeyRot);
 	transform.SetScale(monkeyScale);
 
-	randColShader.Bind();
-	setRandColShader();
-	randColShader.Update(transform, camera);
-	texture1.Bind(0);
+	colourShader.Bind();
+	setColourShader();
+	colourShader.Update(transform, camera);
 	monkey.draw();
+	texture1.Bind(0);
 	monkey.UpdateSphere(*transform.GetPosition(), 2.0f);
 
-	////////////////BOWL/////////////////////////////DYNAMIC
+	////////////////BOWL/////////////////////////////
 
-	glm::vec3 bowlPos = glm::vec3(counter * 6, 0, 100.0);
+	glm::vec3 bowlPos = glm::vec3(counter * 10, 0, 100.0);
 	glm::vec3 bowlRot = glm::vec3(90, 2, 1);
 	glm::vec3 bowlScale = glm::vec3(0.1, 0.1, 0.1);
 
@@ -223,14 +217,14 @@ void MainGame::drawGame()
 	transform.SetRotation(bowlRot);
 	transform.SetScale(bowlScale);
 
-	randColShader.Bind();
-	setRandColShader();
-	randColShader.Update(transform, camera);
+	colourShader.Bind();
+	setColourShader();
+	colourShader.Update(transform, camera);
 	texture1.Bind(0);
 	bowl.draw();
 	bowl.UpdateSphere(*transform.GetPosition(), 2.0f);
 
-	///////////////////CAR//////////////////////////STATIC
+	///////////////////CAR//////////////////////////
 
 	glm::vec3 carPos = glm::vec3(-20, 0, 100.0);
 	glm::vec3 carRot = glm::vec3(90, counter, 0);
@@ -240,10 +234,10 @@ void MainGame::drawGame()
 	transform.SetRotation(carRot);
 	transform.SetScale(carScale);
 
-	randColShader.Bind();
-	setRandColShader();
-	randColShader.Update(transform, camera);
-	texture.Bind(0);
+	colourShader.Bind();
+	setColourShader();
+	colourShader.Update(transform, camera);
+	texture.Bind(1);
 	car.draw();
 	car.UpdateSphere(*transform.GetPosition(), 2.0f);
 
@@ -268,7 +262,9 @@ void MainGame::drawGame()
 bool MainGame::CollisionDetection(glm::vec3 pos1, float rad1, glm::vec3 pos2, float rad2)
 {
 	//calculate distance between two pheres
-	float distance = glm::sqrt((pos2.x - pos1.x)*(pos2.x - pos1.x) + (pos2.y - pos1.y)*(pos2.y - pos1.y) + (pos2.z - pos1.z)*(pos2.z - pos1.z));
+	float distance = glm::sqrt((pos2.x - pos1.x)*(pos2.x - pos1.x) +
+							   (pos2.y - pos1.y)*(pos2.y - pos1.y) +
+							   (pos2.z - pos1.z)*(pos2.z - pos1.z));
 
 	//Check if distance is smaller than sum of radiuses
 	if (distance < (rad1 + rad2))
@@ -280,20 +276,6 @@ bool MainGame::CollisionDetection(glm::vec3 pos1, float rad1, glm::vec3 pos2, fl
 		return false;
 	}
 }
-
-/*bool MainGame::WhichWay()
-{
-	if (CollisionDetection(monkey.GetSpherePos(), monkey.GetSphereRadius(), bowl.GetSpherePos(), bowl.GetSphereRadius()))
-	{
-		//when bowl touches monkey it goes true and towards car
-		return true;
-	}
-	else if (CollisionDetection(car.GetSpherePos(), car.GetSphereRadius(), bowl.GetSpherePos(), bowl.GetSphereRadius()))
-	{
-		//when bowl touches car it goes false and towards monkey
-		return false;
-	}
-}*/
 
 void MainGame::AudioPlay(unsigned int source, glm::vec3 pos)
 {

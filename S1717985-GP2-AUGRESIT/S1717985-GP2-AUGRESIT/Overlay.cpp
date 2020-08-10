@@ -9,7 +9,7 @@ Overlay::Overlay()
 
 void Overlay::initialise(const std::string& fileName)
 {
-	texture.initialise("..\\res\\bricks.jpg");
+	texture.initialiseTexture("..\\res\\bricks.jpg");
 }
 
 

@@ -29,7 +29,7 @@ private:
 
 	void AudioPlay(unsigned int source, glm::vec3 pos);
 
-	void setRandColShader();
+	void setColourShader();
 	
 	bool CollisionDetection(glm::vec3 pos1, float rad1, glm::vec3 pos2, float rad2);
 	bool whichWay = false;
@@ -43,7 +43,7 @@ private:
 	Shader rimShader;
 	Shader toonShader;
 	Shader explosionShader;
-	Shader randColShader;
+	Shader colourShader;
 
 	Display gameDisplay;
 	GameState gameState;
@@ -66,7 +66,6 @@ private:
 	Camera camera;
 
 	float counter;
-	float bowlWay;
 
 	float colourX;
 	float colourY;

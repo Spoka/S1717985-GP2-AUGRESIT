@@ -54,7 +54,6 @@ void Mesh::initialiseModel(const IndexedModel& model)
 	glBindVertexArray(0); // unbind our VAO
 }
 
-
 void Mesh::loadModel(const std::string& filename)
 {
 	IndexedModel model = OBJModel(filename).ToIndexedModel();
