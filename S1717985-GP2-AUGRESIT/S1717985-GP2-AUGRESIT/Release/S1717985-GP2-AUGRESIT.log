@@ -1,0 +1,16 @@
+﻿  Display.cpp
+  GameAudio.cpp
+  main.cpp
+  MainGame.cpp
+  Mesh.cpp
+d:\github\s1717985-gp2-augresit\s1717985-gp2-augresit\s1717985-gp2-augresit\mesh.cpp(62): warning C4930: 'Sphere sphere(void)': prototyped function not called (was a variable definition intended?)
+  ObjLoader.cpp
+d:\github\s1717985-gp2-augresit\s1717985-gp2-augresit\s1717985-gp2-augresit\objloader.cpp(380): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+  Overlay.cpp
+  Shader.cpp
+  Texture.cpp
+  stb_image.c
+  Generating code
+  All 1253 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  S1717985-GP2-AUGRESIT.vcxproj -> D:\GitHub\S1717985-GP2-AUGRESIT\S1717985-GP2-AUGRESIT\Release\S1717985-GP2-AUGRESIT.exe
